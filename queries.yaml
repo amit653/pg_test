@@ -1,0 +1,22 @@
+pg_db_size:
+  query: "SELECT pg_database.datname, pg_database_size(pg_database.datname) as bytes FROM pg_database"
+  master: true
+  cache_seconds: 30
+  metrics:
+    - datname:
+        usage: "LABEL"
+        description: "Name of the database"
+    - bytes:
+        usage: "GAUGE"
+        description: "Disk space used by the database"
+pg_auto_vacuum:
+  query: "select relname as name,last_autovacuum as last_vacuum_date ,n_Dead_tup as dead_tup from pg_stat_user_tables"
+  master: true
+  cache_seconds: 30
+  metrics:
+    - last_vacuum_date:
+        usage: "LABEL"
+        description: "auto vacc.date"
+    - dead_tup:
+          usage: "LABEL"
+          description: "Dead tuple"
