@@ -12,5 +12,5 @@ scrape_configs:
   ## Added custom python exporter running on 8000
   - job_name: 'custom_postgres_exporter'
     static_configs:
-      - targets: ["172.17.0.1:8000"]
+      - targets: ["17x.x.x.x:8000"]
 
