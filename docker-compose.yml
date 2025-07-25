@@ -1,19 +1,30 @@
-
-
 version: "3.9"
 services:
+  web:
+   container_name: python-server
+   command: python main.py
+   build:
+     context: .
+     dockerfile: Dockerfile
+   ports:
+     - "8000:8000"
+   volumes:
+     - ./app/my-app:/app
+
   grafana:
     image: grafana/grafana
     ports:
       - 3000:3000
     volumes:
       - ./grafana:/var/lib/grafana
+    user: "1000"
   prometheus:
     image: prom/prometheus
     ports:
       - 9090:9090
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+
 
   postgres:
     image: postgres:16
@@ -31,10 +42,6 @@ services:
       - 9187:9187
     environment:
       DATA_SOURCE_NAME: "postgresql://postgres:postgres@postgres:5432/test?sslmode=disable"
-    volumes:
-      - ./queries.yaml:/queries.yaml:ro
-    command:
-      - "--extend.query-path=/queries.yaml"
     links:
       - postgres
       - prometheus
