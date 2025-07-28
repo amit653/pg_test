@@ -8,7 +8,7 @@ DB_CONFIG = {
     'dbname': 'test',
     'user': 'postgres',
     'password': 'postgres',
-    'host': '192.168.29.225',
+    'host': 'x.x.xx.xx',
     'port': 5432
 }
 # prom. gauge
