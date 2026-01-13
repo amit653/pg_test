@@ -1,7 +1,7 @@
-version: "3.9"
+#version: "3.9"
 services:
   web:
-   container_name: python-server
+   #container_name: python-server
    command: python main.py
    build:
      context: .
@@ -12,6 +12,7 @@ services:
      - ./app/my-app:/app
 
   grafana:
+    container_name: grafana-server
     image: grafana/grafana
     ports:
       - 3000:3000
@@ -19,6 +20,7 @@ services:
       - ./grafana:/var/lib/grafana
     user: "1000"
   prometheus:
+    container_name: prometheus-server
     image: prom/prometheus
     ports:
       - 9090:9090
@@ -27,6 +29,7 @@ services:
 
 
   postgres:
+    container_name: postgres-server
     image: postgres:16
     ports:
       - 5432:5432
@@ -37,11 +40,17 @@ services:
       POSTGRES_DB: test
 
   postgres-exporter:
+    container_name: postgres-exporter
     image: prometheuscommunity/postgres-exporter
+    volumes:
+      - ./queries.yaml:/etc/postgres_exporter/queries.yaml
     ports:
       - 9187:9187
     environment:
+      #PG_EXPORTER_EXTEND_QUERY_PATH: "/etc/postgres_exporter/queries.yaml"
       DATA_SOURCE_NAME: "postgresql://postgres:postgres@postgres:5432/test?sslmode=disable"
+    command:
+      - "--extend.query-path=/etc/postgres_exporter/queries.yaml"
     links:
       - postgres
       - prometheus

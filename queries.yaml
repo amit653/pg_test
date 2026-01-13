@@ -8,7 +8,24 @@ pg_db_size:
         description: "Name of the database"
     - bytes:
         usage: "GAUGE"
-        description: "Disk space used by the database"
+        description: "Disk space used by TEST database"
+pg_postmaster:
+  query: "SELECT pg_postmaster_start_time as start_time_seconds from pg_postmaster_start_time()"
+  master: true
+  metrics:
+    - start_time_seconds:
+        usage: "GAUGE"
+        description: "Time at which postmaster started"
+pg_version:
+  query: "SELECT version() as version, 1 as info"
+  master: true
+  metrics:
+    - version:
+        usage: "LABEL"
+        description: "PostgreSQL version string"
+    - info:
+        usage: "GAUGE"
+        description: "A metric with a constant '1' value labeled by version"
 pg_auto_vacuum:
   query: "select relname as name,last_autovacuum as last_vacuum_date ,n_Dead_tup as dead_tup from pg_stat_user_tables"
   master: true
